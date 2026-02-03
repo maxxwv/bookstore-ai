@@ -17,6 +17,10 @@ Route::get('dashboard', function () {
 
 require __DIR__.'/settings.php';
 
+Route::prefix('chatbot')->group(function() {
+	Route::get('/', [AiConversationController::class, 'conversationForm'])->name('conversation-form');
+});
+
 Route::prefix('ai')->group(function() {
 	Route::post('/conversation', [AiConversationController::class, 'ingest']);
 });

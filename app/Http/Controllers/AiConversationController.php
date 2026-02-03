@@ -15,6 +15,7 @@ use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
 use Illuminate\Support\Arr;
 use Illuminate\Support\Facades\Log;
+use Inertia\Inertia;
 use Prism\Prism\Exceptions\PrismRateLimitedException;
 use Prism\Prism\ValueObjects\ProviderRateLimit;
 
@@ -66,5 +67,12 @@ class AiConversationController extends Controller
 				'Something went wrong.',
 			], Response::HTTP_INTERNAL_SERVER_ERROR);
 		}
+	}
+
+	public function conversationForm(Request $request)
+	{
+		return Inertia::render('ConversationDashboard', [
+			'conversation' => null,
+		]);
 	}
 }
