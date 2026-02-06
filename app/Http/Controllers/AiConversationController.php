@@ -35,6 +35,13 @@ class AiConversationController extends Controller
 
 	public function ingest(AiConversationRequest $request): Response | ResponseFactory
 	{
+		sleep(5);
+		return response([
+			'conversation_id' => '123sdfdsf',
+			'message_content' => 'Message Content!!',
+			'promptTokens' => 12,
+			'completionTokens' => 104,
+		]);
 		try {
 			if($request->isNewConversation()) {
 				$conversationId = new AiConversationRepository()->createConversation($request);
@@ -72,7 +79,8 @@ class AiConversationController extends Controller
 	public function conversationForm(Request $request)
 	{
 		return Inertia::render('ConversationDashboard', [
-			'conversation' => null,
+			'message_content' => null,
+			'model' => 0,
 		]);
 	}
 }
