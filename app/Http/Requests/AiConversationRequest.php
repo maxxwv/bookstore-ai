@@ -24,7 +24,7 @@ class AiConversationRequest extends FormRequest {
     public function rules(): array
     {
         return [
-            'conversation_id' => 'sometimes|required|uuid',
+            'conversation_id' => 'nullable|uuid',
 			'model' => [
 				'required',
 				Rule::in(array_column(AiModelEnum::cases(), 'value')),

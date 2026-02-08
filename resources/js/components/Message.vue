@@ -1,4 +1,4 @@
-<script setup lang="typescript">
+<script setup lang="ts">
 	const props = defineProps({
 		message: {
 			type: String,
@@ -20,7 +20,7 @@
 
 <template>
 	<Message :message="message" :prompt_tokens="prompt_tokens" :completion_tokens="completion_tokens" :message_type="message_type">
-		<div :class="{{ props.message_type }}" class="message">
+		<div class="{{ props.message_type }} message">
 			<p>{{ props.message }}</p>
 			<div v-if="props.message_type == 'AssistantMessage'">
 				<div>Prompt Tokens: {{ props.prompt_tokens }}</div>

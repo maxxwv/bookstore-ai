@@ -1,6 +1,7 @@
 
 <script setup lang="ts">
 import { Head } from '@inertiajs/vue3';
+import { render, h } from 'vue';
 import AppLayout from '@/layouts/AppLayout.vue';
 import Message from '@/components/Message.vue';
 import { home } from '@/routes';
@@ -11,20 +12,12 @@ import { ref } from 'vue';
 import axios from 'axios';
 import { Spinner } from '@/components/ui/spinner';
 
-let message_content = '';
-let input = '';
-let conversation_id = '';
-let loading = false;
+let messages = ref(new Array());
+let input = "";
+let loading = ref(false);
+let conversation_id: string | null = null;
 
 const props = defineProps({
-	conversation_id: {
-		type: String,
-		required: false
-	},
-	conversation: {
-		type: String,
-		required: false,
-	},
 	model: {
 		type: Number,
 		required: true,
@@ -41,23 +34,37 @@ const breadcrumbs: BreadcrumbItem[] = [
 
 function getResponseFromAi()
 {
-	loading = true;
-	const response = axios.post(
+	loading.value = true;
+	let current_messages = messages.value;
+
+	current_messages.push({
+		message: input,
+		message_type: 'HumanMessage'
+	});
+
+	axios.post(
 		'ai/conversation/',
 		{
-			conversation_id: props.conversation_id,
+			conversation_id: conversation_id,
 			model: props.model,
 			message_content: input
 		}
 	)
 	.then(response => {
-		console.log(response.data);
+		current_messages.push({
+			message: response.data.message_content,
+			prompt_tokens: response.data.promptTokens,
+			completion_tokens: response.data.responseTokens,
+			message_type: 'AssistantMessage',
+		});
+		messages.value = current_messages;
+		conversation_id = response.data.conversation_id;
 	})
 	.catch(error => {
 		console.log(error);
 	})
 	.finally(() => {
-		loading = false;
+		loading.value = false;
 	});
 }
 </script>
@@ -69,8 +76,15 @@ function getResponseFromAi()
 		<h2 class="max-w-xl ml-auto mr-auto w-full">
 			Conversation:
 		</h2>
-		<div class="max-w-xl ml-auto mr-auto w-full p-3 grow border-white border rounded-md flex">
-			<Spinner v-if="loading" class="size-6 self-center mr-auto ml-auto" />
+		<div class="max-w-xl ml-auto mr-auto w-full p-3 grow border-white border rounded-md flex" id="output">
+			<Spinner :class="{ visible: loading, invisible: !loading }" class="size-6 self-center mr-auto ml-auto" />
+			<ul class="conversation">
+				<li
+					v-for="m in messages"
+					:key="m.id"
+					class="{{ m.message_type }}"
+				>{{ m.message }}</li>
+			</ul>
 		</div>
 		<div class="max-w-xl ml-auto mr-auto w-full">
 			<Textarea
@@ -80,6 +94,8 @@ function getResponseFromAi()
 			<Button
 				variant="outline"
 				@click="getResponseFromAi"
+				aria-label="Submit"
+				:disabled="loading"
 			>Submit</Button>
 		</div>
 	</AppLayout>

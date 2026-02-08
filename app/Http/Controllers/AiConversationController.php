@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Enums\AiMessageTypeEnum;
+use App\Enums\AiModelEnum;
 use App\Http\Requests\AiConversationRequest;
 use App\Models\AiConversation;
 use App\Repositories\AiConversationRepository;
@@ -35,13 +36,6 @@ class AiConversationController extends Controller
 
 	public function ingest(AiConversationRequest $request): Response | ResponseFactory
 	{
-		sleep(5);
-		return response([
-			'conversation_id' => '123sdfdsf',
-			'message_content' => 'Message Content!!',
-			'promptTokens' => 12,
-			'completionTokens' => 104,
-		]);
 		try {
 			if($request->isNewConversation()) {
 				$conversationId = new AiConversationRepository()->createConversation($request);
@@ -80,7 +74,7 @@ class AiConversationController extends Controller
 	{
 		return Inertia::render('ConversationDashboard', [
 			'message_content' => null,
-			'model' => 0,
+			'model' => AiModelEnum::tryFrom(0)->value,
 		]);
 	}
 }
