@@ -12,7 +12,7 @@ import { Spinner } from '@/components/ui/spinner';
 import { User, Laptop } from 'lucide-vue-next';
 
 let messages = ref(new Array());
-let input = "";
+let input = ref("");
 let loading = ref(false);
 let conversation_id: string | null = null;
 
@@ -33,11 +33,13 @@ const breadcrumbs: BreadcrumbItem[] = [
 
 function getResponseFromAi()
 {
+	let currentInput = input.value;
+	input.value = "";
 	loading.value = true;
 	let current_messages = messages.value;
 
 	current_messages.push({
-		message: input,
+		message: currentInput,
 		message_type: 'HumanMessage'
 	});
 
@@ -46,7 +48,7 @@ function getResponseFromAi()
 		{
 			conversation_id: conversation_id,
 			model: props.model,
-			message_content: input
+			message_content: currentInput
 		}
 	)
 	.then(response => {
@@ -106,6 +108,9 @@ function getResponseFromAi()
 </template>
 
 <style lang="css">
+	#output {
+		max-height: 100vh;
+	}
 	.conversation li {
 		display: grid;
 		gap: 7px;
@@ -115,12 +120,12 @@ function getResponseFromAi()
 		margin-top: 10px;
 	}
 	.AssistantMessage {
-		border-color: red;
+		border-color: #44403c;
 		margin-right: auto;
 		grid-template-columns: max-content auto;
 	}
 	.HumanMessage {
-		border-color: blue;
+		border-color: #0f172a;
 		margin-left: auto;
 		grid-template-columns: auto max-content;
 	}
