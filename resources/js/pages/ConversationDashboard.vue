@@ -120,12 +120,12 @@ function getResponseFromAi()
 		margin-top: 10px;
 	}
 	.AssistantMessage {
-		border-color: #44403c;
+		border-color: #1e3a8a;
 		margin-right: auto;
 		grid-template-columns: max-content auto;
 	}
 	.HumanMessage {
-		border-color: #0f172a;
+		border-color: #115e59;
 		margin-left: auto;
 		grid-template-columns: auto max-content;
 	}
