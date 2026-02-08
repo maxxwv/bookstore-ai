@@ -36,12 +36,6 @@ class AiConversationController extends Controller
 
 	public function ingest(AiConversationRequest $request): Response | ResponseFactory
 	{
-		return response([
-			'message_content' => fake()->sentence(),
-			'conversation_id' => $request->conversation_id ?? fake()->uuid(),
-			'completionTokens' => rand(15, 125),
-			'promptTokens' => rand(10, 25),
-		]);
 		try {
 			if($request->isNewConversation()) {
 				$conversationId = new AiConversationRepository()->createConversation($request);
