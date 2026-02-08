@@ -1,9 +1,7 @@
 
 <script setup lang="ts">
 import { Head } from '@inertiajs/vue3';
-import { render, h } from 'vue';
 import AppLayout from '@/layouts/AppLayout.vue';
-import Message from '@/components/Message.vue';
 import { home } from '@/routes';
 import { type BreadcrumbItem } from '@/types';
 import { Textarea } from '@/components/ui/textarea';
@@ -11,6 +9,7 @@ import { Button } from '@/components/ui/button';
 import { ref } from 'vue';
 import axios from 'axios';
 import { Spinner } from '@/components/ui/spinner';
+import { User, Laptop } from 'lucide-vue-next';
 
 let messages = ref(new Array());
 let input = "";
@@ -76,14 +75,19 @@ function getResponseFromAi()
 		<h2 class="max-w-xl ml-auto mr-auto w-full">
 			Conversation:
 		</h2>
-		<div class="max-w-xl ml-auto mr-auto w-full p-3 grow border-white border rounded-md flex" id="output">
-			<Spinner :class="{ visible: loading, invisible: !loading }" class="size-6 self-center mr-auto ml-auto" />
-			<ul class="conversation">
+		<div class="max-w-xl ml-auto mr-auto w-full p-3 grow border-white border rounded-md flex overflow-y-scroll relative" id="output">
+			<Spinner :class="{ visible: loading, invisible: !loading }" class="size-6 absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 z-100" />
+			<ul class="conversation grow">
 				<li
 					v-for="m in messages"
 					:key="m.id"
-					class="{{ m.message_type }}"
-				>{{ m.message }}</li>
+					:class="m.message_type"
+					class="border rounded-md max-w-9/10 select-none"
+				>
+					<Laptop v-if="m.message_type == 'AssistantMessage'" />
+					<p>{{ m.message }}</p>
+					<User v-if="m.message_type == 'HumanMessage'" />
+				</li>
 			</ul>
 		</div>
 		<div class="max-w-xl ml-auto mr-auto w-full">
@@ -102,5 +106,22 @@ function getResponseFromAi()
 </template>
 
 <style lang="css">
-
+	.conversation li {
+		display: grid;
+		gap: 7px;
+		padding: 5px;
+	}
+	.conversation li + li {
+		margin-top: 10px;
+	}
+	.AssistantMessage {
+		border-color: red;
+		margin-right: auto;
+		grid-template-columns: max-content auto;
+	}
+	.HumanMessage {
+		border-color: blue;
+		margin-left: auto;
+		grid-template-columns: auto max-content;
+	}
 </style>
