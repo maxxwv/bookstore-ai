@@ -30,6 +30,10 @@ More is coming, but right now there are a couple different things you can do. Th
      - Read the seeders or query the database after running `php artisan migrate` to see which of the two is in stock and which isn't
 	 - The bot should tell you correctly which book is in stock based on the number of copies you want to buy
 
+- If you have Apache or Nginx installed, create a virtual host file for the bookstore-ai directory
+- In your browser of choice, visit the home page
+- Chat with the bot in the web UI
+
 ## Testing
 As of Februrary 1, 2026 there are some feature tests in the `ai-test` group that checks the following:
   - Creating a conversation
