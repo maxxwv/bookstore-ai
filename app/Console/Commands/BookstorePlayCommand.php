@@ -7,6 +7,7 @@ use App\Http\Controllers\AiConversationController;
 use App\Http\Requests\AiConversationRequest;
 use Illuminate\Console\Command;
 use Illuminate\Support\Facades\Log;
+use Illuminate\Support\Str;
 
 use function Laravel\Prompts\spin;
 use function Laravel\Prompts\text;
@@ -43,11 +44,12 @@ class BookstorePlayCommand extends Command
 
 	private function processConversation(string $text): void
 	{
+		$model = Str::studly(Str::replaceMatches('/[^a-zA-Z\- 0-9]/', '', config('prism.ai_model')));
 		$request = new AiConversationRequest(
 			[
 				'conversation_id' => $this->conversationId ?? null,
 				'message_content' => $text,
-				'model' => AiModelEnum::Gpt4oMini->value
+				'model' => AiModelEnum::{$model}->value
 			]
 		);
 
