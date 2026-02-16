@@ -55,7 +55,7 @@ function getResponseFromAi()
 		current_messages.push({
 			message: response.data.message_content,
 			prompt_tokens: response.data.promptTokens,
-			completion_tokens: response.data.responseTokens,
+			completion_tokens: response.data.completionTokens,
 			message_type: 'AssistantMessage',
 		});
 		messages.value = current_messages;
@@ -89,6 +89,10 @@ function getResponseFromAi()
 					<Laptop v-if="m.message_type == 'AssistantMessage'" />
 					<p>{{ m.message }}</p>
 					<User v-if="m.message_type == 'HumanMessage'" />
+					<div class="tokens" v-if="m.message_type == 'AssistantMessage'">
+						<span>Prompt tokens: {{ m.prompt_tokens }}</span>
+						<span>Completion tokens: {{ m.completion_tokens }}</span>
+					</div>
 				</li>
 			</ul>
 		</div>
@@ -122,11 +126,16 @@ function getResponseFromAi()
 	.AssistantMessage {
 		border-color: #1e3a8a;
 		margin-right: auto;
-		grid-template-columns: max-content auto;
 	}
 	.HumanMessage {
 		border-color: #115e59;
 		margin-left: auto;
 		grid-template-columns: auto max-content;
+	}
+	.tokens {
+		grid-row: 2;
+		grid-column: 1 / 3;
+		display: grid;
+		grid-template-columns: 1fr 1fr;
 	}
 </style>
