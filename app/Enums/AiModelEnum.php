@@ -9,6 +9,7 @@ enum AiModelEnum: int
 	case Gpt5Mini = 1;
 	// gemini
 	case Gemini25FlashLite = 3;
+	case Gemini3FlashPreview = 4;
 
 	public function modelName(): string
 	{
@@ -16,6 +17,7 @@ enum AiModelEnum: int
 			self::Gpt4oMini => 'gpt-4o-mini',
 			self::Gpt5Mini => 'gpt-5-mini',
 			self::Gemini25FlashLite => 'gemini-2.5-flash-lite',
+			self::Gemini3FlashPreview => 'gemini-3-flash-preview',
 		};
 	}
 }
