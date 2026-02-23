@@ -5,6 +5,10 @@ use Illuminate\Support\Facades\Route;
 use Inertia\Inertia;
 use Laravel\Fortify\Features;
 
+Route::get('dashboard', function () {
+    return redirect()->route('conversation-form');
+})->middleware(['auth', 'verified'])->name('dashboard');
+
 Route::get('/', function () {
     return redirect()->route('conversation-form');
 })->name('home');
